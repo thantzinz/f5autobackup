@@ -730,3 +730,19 @@ sys application template /Common/f5_backup {
     tmpl-checksum none
     tmpl-signature none
 }
+
+DATE=`date "+%Y%m%d_%H%M"`
+HOST=''
+USER='f5'
+PASSWD=''
+FILE='file.txt'
+/usr/bin/tmsh save sys ucs $(date +%Y%m%d_%H%M)_${HOSTNAME}
+cd /var/local/ucs/
+ftp -n $HOST <<END_SCRIPT
+quote USER $USER
+quote PASS $PASSWD
+put $(date +%Y%m%d_%H%M)_${HOSTNAME}.ucs
+quit
+END_SCRIPT
+rm -rf $(date +%Y%m%d_%H%M)_${HOSTNAME}.ucs
+exit 0
